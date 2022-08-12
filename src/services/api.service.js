@@ -1,10 +1,16 @@
-const { axiosIntance } = require("../utils/axiosInstance");
-require("dotenv").config;
+require("dotenv").config();
+const axios = require("axios");
+const { BASE_URL, API_KEY } = process.env;
 
 const getGamesAPI = async () => {
-  const games = await axiosIntance.get("&page_size=40");
+  const games = await axios.get(`${BASE_URL}?key=${API_KEY}&page_size=40`)
+  return games;
 };
 
-module.exports = {
-  getGamesAPI
+const getGameAPIByName = async() => {
+  
 }
+
+module.exports = {
+  getGamesAPI,
+};

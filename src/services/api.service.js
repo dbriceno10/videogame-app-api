@@ -23,7 +23,7 @@ const getGameApiById = async (id) => {
   return await axios.get(`${BASE_URL}/games/${id}?key=${API_KEY}`);
 };
 
-const getGameGenres = async () => {
+const getApiGenres = async () => {
   const response = await axios(`${BASE_URL}/genres?key=${API_KEY}`);
   const genres = response.data.results.map((e) => e.name);
   return genres;
@@ -50,5 +50,5 @@ const getGameAPIByName = async (search) => {
 module.exports = {
   getGamesApi,
   getGameApiById,
-  getGameGenres,
+  getApiGenres,
 };

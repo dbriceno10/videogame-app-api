@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Genre, Videogame } = require("../src/db");
+const { Genre, Videogame } = require("../db");
 const { getApiGenres } = require("./api.service");
 
 const getDbGames = async () => {
@@ -52,7 +52,7 @@ const getGenresDb = async () => {
   return await Genre.findAll();
 };
 
-const createGame = (
+const createGameDb = (
   name,
   description,
   released,
@@ -73,7 +73,7 @@ const createGame = (
 module.exports = {
   saveGenresDb,
   getGenresDb,
-  createGame,
+  createGameDb,
   getDbGames,
   getDbGameById,
   getDbGameByName,

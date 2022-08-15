@@ -1,10 +1,11 @@
-const { getGamesAPI } = require("../services/api.service.js");
+const { default: axios } = require("axios");
+const { getGamesApi } = require("../services/api.service.js");
 
 const getGames = async (req, res) => {
   try {
-    const apiGames = await getGamesAPI();
-    res.status(200).json(apiGames.data);
-    console.log(apiGames.data)
+    const apiGames = await getGamesApi();
+    res.status(200).json(apiGames);
+
   } catch (error) {
     console.error(error);
     res

@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { Genre, Videogame } = require("../db");
 const { getApiGenres } = require("./api.service");
+const { getGenres } = require("../utils/getGenres");
 
 const getDbGames = async () => {
   const games = await Videogame.findAll({
@@ -12,10 +13,26 @@ const getDbGames = async () => {
       },
     },
   });
-  return games;
+  const gamesDb = games.map((e) => {
+    return { ...e.dataValues, genres: getGenres(e.dataValues) };
+  });
+  return gamesDb;
 };
 
-const getDbGameById = async () => {
+const getIds = async (arrayGenres) => {
+  let genresId = [];
+  for (let i = 0; i < arrayGenres.length; i++) {
+    genresId.push(
+      await Genre.findOne({
+        where: { name: arrayGenres[i] },
+        attributes: ["id"],
+      })
+    );
+  }
+  return genresId;
+};
+
+const getDbGameById = async (id) => {
   const game = await Videogame.findByPk(id, {
     include: [
       {
@@ -26,18 +43,21 @@ const getDbGameById = async () => {
       },
     ],
   });
-  return game;
+  return { ...game.dataValues, genres: getGenres(game.dataValues) };
 };
 
-const getDbGameByName = async (name) => {
+/* const getDbGameByName = async (name) => {
   return await findOne({
     where: {
       name: name.trim().toLowerCase(),
     },
     include: Genre,
   });
-};
+}; */
 
+const getGenresDb = async () => {
+  return await Genre.findAll();
+};
 const saveGenresDb = async () => {
   const genre = await getApiGenres();
   genre.forEach((e) => {
@@ -45,10 +65,7 @@ const saveGenresDb = async () => {
       where: { name: e },
     });
   });
-};
-
-const getGenresDb = async (genre) => {
-  return await Genre.findAll({ where: { name: genre } });
+  return await getGenresDb();
 };
 
 const createdNewGameDb = async (
@@ -66,7 +83,6 @@ const createdNewGameDb = async (
     background_image,
     rating: parseFloat(rating),
     platforms,
-    createdInDb: true,
   });
 };
 
@@ -77,7 +93,7 @@ const createGameDb = async (
   background_image,
   rating,
   platforms,
-  genre
+  genres
 ) => {
   const newGame = await createdNewGameDb(
     name,
@@ -87,15 +103,13 @@ const createGameDb = async (
     rating,
     platforms
   );
-  const genres = await getGenresDb(genre);
-  await newGame.addGenre(genres);
+  const genresId = await getIds(genres);
+  await newGame.setGenres(genresId);
 };
 
 module.exports = {
   saveGenresDb,
-  getGenresDb,
   getDbGames,
   getDbGameById,
-  getDbGameByName,
   createGameDb,
 };

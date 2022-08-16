@@ -1,6 +1,9 @@
 require("dotenv").config();
 const axios = require("axios");
-const { getInfoApiGameArray } = require("../utils/getInfoGameAPI");
+const {
+  getInfoApiGameArray,
+  getInfoApiGame,
+} = require("../utils/getInfoGameAPI");
 const { BASE_URL, API_KEY } = process.env;
 
 const getGamesApi = async () => {
@@ -13,14 +16,13 @@ const getGamesApi = async () => {
   ];
 
   const response = await Promise.all(promises);
-  const gamesAPI = response.map((e) => e.data.results);
-  const games = getInfoApiGameArray(gamesAPI);
-
-  return games;
+  const games = response.map((e) => e.data.results);
+  return getInfoApiGameArray(games);
 };
 
 const getGameApiById = async (id) => {
-  return await axios.get(`${BASE_URL}/games/${id}?key=${API_KEY}`);
+  const game = await axios.get(`${BASE_URL}/games/${id}?key=${API_KEY}`);
+  return getInfoApiGame(game.data);
 };
 
 const getApiGenres = async () => {

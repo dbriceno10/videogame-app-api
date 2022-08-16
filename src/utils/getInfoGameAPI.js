@@ -2,16 +2,16 @@ const getInfoApiGame = (game) => {
   return {
     id: game.id,
     name: game.name,
+    description: game.description,
     rating: game.rating,
     background_image: game.background_image,
     genres: game.genres.map((e) => {
-      // return { name: e.name };
       return e.name;
     }),
     platforms: game.platforms.map((e) => {
-      // return { name: e.platform.name };
       return e.platform.name;
     }),
+    released: game.released,
     createdInDb: false,
   };
 };

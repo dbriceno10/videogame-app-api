@@ -10,7 +10,6 @@ const getAllGames = async () => {
 };
 
 const getGames = async (req, res) => {
-  //TODO: Revisar que se envie en el array de generos y plataformas del api solo el nombre de cada una
   const { name } = req.body;
   try {
     const games = await getAllGames();

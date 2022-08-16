@@ -58,7 +58,8 @@ const createGameDb = (
   released,
   background_image,
   rating,
-  platforms
+  platforms,
+  genre
 ) =>
   Videogame.create({
     name,

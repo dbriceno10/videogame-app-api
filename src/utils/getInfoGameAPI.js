@@ -5,10 +5,12 @@ const getInfoApiGame = (game) => {
     rating: game.rating,
     background_image: game.background_image,
     genres: game.genres.map((e) => {
-      return { name: e.name };
+      // return { name: e.name };
+      return e.name;
     }),
     platforms: game.platforms.map((e) => {
-      return { name: e.platform.name };
+      // return { name: e.platform.name };
+      return e.platform.name;
     }),
     createdInDb: false,
   };
@@ -20,5 +22,5 @@ const getInfoApiGameArray = (array = []) => {
 
 module.exports = {
   getInfoApiGame,
-  getInfoApiGameArray
+  getInfoApiGameArray,
 };

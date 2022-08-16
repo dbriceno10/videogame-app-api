@@ -30,13 +30,12 @@ const getDbGameById = async () => {
 };
 
 const getDbGameByName = async (name) => {
-  const game = await findOne({
+  return await findOne({
     where: {
       name: name.trim().toLowerCase(),
     },
     include: Genre,
   });
-  return game;
 };
 
 const saveGenresDb = async () => {
@@ -48,11 +47,30 @@ const saveGenresDb = async () => {
   });
 };
 
-const getGenresDb = async () => {
-  return await Genre.findAll();
+const getGenresDb = async (genre) => {
+  return await Genre.findAll({ where: { name: genre } });
 };
 
-const createGameDb = (
+const createdNewGameDb = async (
+  name,
+  description,
+  released,
+  background_image,
+  rating,
+  platforms
+) => {
+  return await Videogame.create({
+    name,
+    description,
+    released,
+    background_image,
+    rating: parseFloat(rating),
+    platforms,
+    createdInDb: true,
+  });
+};
+
+const createGameDb = async (
   name,
   description,
   released,
@@ -60,22 +78,24 @@ const createGameDb = (
   rating,
   platforms,
   genre
-) =>
-  Videogame.create({
+) => {
+  const newGame = await createdNewGameDb(
     name,
     description,
     released,
     background_image,
     rating,
-    platforms,
-    createdInDb: true,
-  });
+    platforms
+  );
+  const genres = await getGenresDb(genre);
+  await newGame.addGenre(genres);
+};
 
 module.exports = {
   saveGenresDb,
   getGenresDb,
-  createGameDb,
   getDbGames,
   getDbGameById,
   getDbGameByName,
+  createGameDb,
 };

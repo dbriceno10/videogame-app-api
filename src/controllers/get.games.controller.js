@@ -41,10 +41,8 @@ const createGame = async (req, res) => {
     background_image,
     platforms,
     genre,
-    createdInDb,
+    rating
   } = req.body;
-  const rating = parseFloat(req.body.rating);
-
   try {
     createGameDb(
       name,
@@ -53,7 +51,6 @@ const createGame = async (req, res) => {
       background_image,
       rating,
       platforms,
-      createdInDb,
       genre
     );
     res.status(201).send({ messaje: "El juego se ha creado con éxito" });
